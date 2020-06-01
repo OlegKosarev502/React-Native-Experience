@@ -1,8 +1,17 @@
 import React, { FunctionComponent } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
+import {
+  Container,
+  Content,
+  H1,
+  Text,
+  Card,
+  CardItem,
+  Body,
+  Button
+} from 'native-base';
 
 import { ITodo } from '../../interfaces/intrefaces';
-import { MainStyles } from '../../shared/mainStyles';
 
 interface ITodoDetailsProps {
   data: ITodo;
@@ -21,25 +30,53 @@ export const TodoDetails: FunctionComponent<ITodoDetailsProps> = ({
   };
 
   return (
-    <View style={MainStyles.container}>
-      <Text style={MainStyles.header}>
-        { data.title }
-      </Text>
+    <Container>
+      <Content style={styles.content}>
+        <H1 style={styles.header}>
+          { data.title }
+        </H1>
 
-      <Text style={styles.description}>
-        { data.description }
-      </Text>
+        <Card>
+          <CardItem header>
+            <Text style={styles.cardHeader}>
+              Description
+            </Text>
+          </CardItem>
 
-      <Button
-        onPress={complete}
-        title="Complete To-Do"
-      />
-    </View>
+          <CardItem>
+            <Body>
+              <Text>
+                { data.description }
+              </Text>
+            </Body>
+          </CardItem>
+        </Card>
+
+        <Button
+          block
+          onPress={complete}
+          style={styles.button}
+        >
+          <Text>COMPLETE</Text>
+        </Button>
+      </Content>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  description: {
-    marginBottom: 20,
+  content: {
+    marginTop: 16,
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  header: {
+    marginBottom: 8,
+  },
+  cardHeader: {
+    fontWeight: "700",
+  },
+  button: {
+    marginTop: 32,
   },
 });
