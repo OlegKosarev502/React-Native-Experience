@@ -1,11 +1,17 @@
-import React, { FunctionComponent } from 'react';
-import { View, Text, Button } from 'react-native';
+import React, { FunctionComponent, useState, useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+import {
+  Spinner,
+  Container,
+  Content,
+  Text,
+  List,
+  ListItem,
+  Button
+} from 'native-base';
+import * as Font from 'expo-font';
 
-import { MainStyles } from '../../shared/mainStyles';
-import { Todo } from '../Todo/todo';
 import { ITodo } from '../../interfaces/intrefaces';
-
-// import { List, ListItem } from 'native-base';
 
 interface ITodoListProps {
   todos: ITodo[];
@@ -18,43 +24,83 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
   showTodoDetails,
   navigation,
 }) => {
-  const openTodoForm = () => {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        Roboto: require('native-base/Fonts/Roboto.ttf'),
+        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+      });
+
+      setIsReady(true);
+    }
+
+    loadFonts();
+  }, []);
+
+  const showDetails = (todo: ITodo): void => {
+    showTodoDetails(todo);
+    navigation.navigate("Details");
+  };
+
+  const openTodoForm = (): void => {
     navigation.navigate("Form");
   };
 
+  const renderListItems = (todos: ITodo[]): React.ReactNode => {
+    if (!todos) {
+      return null;
+    }
+
+    return todos.map((todo, index) => {
+      return (
+        <ListItem
+          key={index}
+          button={true}
+          onPress={() => showDetails(todo)}
+        >
+          <Text>
+            {todo.title}
+          </Text>
+        </ListItem>
+      );
+    });
+  };
+
+  if (!isReady) {
+    return (
+      <Spinner style={styles.spiner}/>
+    );
+  }
+
   return (
-    <View style={MainStyles.container}>
-      <Text style={MainStyles.header}>
-        To-Do List:
-      </Text>
+    <Container>
+      <Content>
+        <List>
+          <ListItem itemHeader>
+            <Text>TO-DO LIST</Text>
+          </ListItem>
 
-      {/* <List>
-        {todos && todos.map((todo, index) => {
-          return (
-            <ListItem key={index}>
-              <Text>
-                { todo.title }
-              </Text>
-            </ListItem>
-          );
-        })}
-      </List> */}
+          {renderListItems(todos)}
+        </List>
 
-      {todos && todos.map((todo, index) => {
-        return (
-          <Todo
-            key={index}
-            navigation={navigation}
-            todoInfo={todo}
-            showDetails={showTodoDetails}
-          />
-        );
-      })}
-
-      <Button
-        onPress={openTodoForm}
-        title="Add To-Do"
-      />
-    </View>
+        <Button block onPress={openTodoForm} style={styles.button}>
+          <Text>Add To-Do</Text>
+        </Button>
+      </Content>
+    </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  spiner: {
+    flex: 1,
+    alignSelf: 'center',
+  },
+  button: {
+    marginTop: 32,
+    marginLeft: 16,
+    marginRight: 16,
+  },
+});

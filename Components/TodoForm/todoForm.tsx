@@ -1,13 +1,15 @@
 import React, { FunctionComponent, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
+  Container,
+  Content,
+  Form,
+  Item,
+  Input,
+  Label,
   Button,
-} from 'react-native';
-
-import { MainStyles } from '../../shared/mainStyles';
+  Text
+} from 'native-base';
 
 interface ITodoFormProps {
   addTodo: any;
@@ -18,41 +20,50 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
   addTodo,
   navigation,
 }) => {
-  const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
+  const createTodo = (): void => {
+    const data = {
+      title,
+      description,
+    };
+    
+    addTodo(data);
+    navigation.navigate("List");
+  };
 
   return (
-    <View style={MainStyles.container}>
-      <Text style={MainStyles.header}>
-        To-Do Form:
-      </Text>
+    <Container>
+      <Content>
+        <Form>
+          <Item stackedLabel>
+            <Label>Title</Label>
+            <Input onChangeText={value => setTitle(value)} />
+          </Item>
 
-      <TextInput
-        value={text}
-        onChangeText={value => setText(value)}
-        placeholder={"To-Do Title"}
-        style={styles.titleInput}
-      />
+          <Item stackedLabel last>
+            <Label>Description</Label>
+            <Input onChangeText={value => setDescription(value)} />
+          </Item>
+        </Form>
 
-      <Button
-        onPress={() => {
-          addTodo({
-            title: text,
-            description: text,
-          })
-          navigation.navigate("List");
-        }}
-        title="Submit"
-      />
-    </View>
+        <Button
+          block
+          onPress={createTodo}
+          style={styles.button}
+        >
+          <Text>CREATE TO-DO</Text>
+        </Button>
+      </Content>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  titleInput: {
-    height: 40,
-    paddingLeft: 12,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: 'gray',
+  button: {
+    marginTop: 32,
+    marginLeft: 16,
+    marginRight: 16,
   },
 });
