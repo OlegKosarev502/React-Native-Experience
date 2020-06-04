@@ -50,6 +50,18 @@ export const TodoDetails: FunctionComponent<ITodoDetailsProps> = ({
               </Text>
             </Body>
           </CardItem>
+          
+          {/* {data.date && (
+            <Text>
+              {data.date}
+            </Text>
+          )}
+
+          {data.time && (
+            <Text>
+              {data.time}
+            </Text>
+          )} */}
         </Card>
 
         <Button
