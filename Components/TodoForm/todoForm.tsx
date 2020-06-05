@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, Text } from 'react-native';
 import {
   Container,
   Content,
@@ -8,7 +8,6 @@ import {
   Input,
   Label,
   Button,
-  Text,
 } from 'native-base';
 import { Picker } from '../DateTimePicker/picker';
 
@@ -35,40 +34,41 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
     };
     
     addTodo(data);
-    navigation.navigate("List");
+    navigation.navigate("Notes");
   };
 
   return (
-    <Container>
-      <Content>
-        <Form>
-          <Item stackedLabel>
-            <Label>Title</Label>
-            <Input onChangeText={value => setTitle(value)} />
-          </Item>
+    <Text>Form</Text>
+    // <Container>
+    //   <Content>
+    //     <Form>
+    //       <Item stackedLabel>
+    //         <Label>Title</Label>
+    //         <Input onChangeText={value => setTitle(value)} />
+    //       </Item>
 
-          <Item stackedLabel>
-            <Label>Description</Label>
-            <Input onChangeText={value => setDescription(value)} />
-          </Item>
-        </Form>
+    //       <Item stackedLabel>
+    //         <Label>Description</Label>
+    //         <Input onChangeText={value => setDescription(value)} />
+    //       </Item>
+    //     </Form>
 
-        {Platform.OS !== "ios" && (
-          <Picker
-            updateDate={(value) => setDateString(value)}
-            updateTime={(value) => setTimeString(value)}
-          />
-        )}
+    //     {Platform.OS !== "ios" && (
+    //       <Picker
+    //         updateDate={(value) => setDateString(value)}
+    //         updateTime={(value) => setTimeString(value)}
+    //       />
+    //     )}
 
-        <Button
-          block
-          onPress={createTodo}
-          style={styles.button}
-        >
-          <Text>CREATE TO-DO</Text>
-        </Button>
-      </Content>
-    </Container>
+    //     <Button
+    //       block
+    //       onPress={createTodo}
+    //       style={styles.button}
+    //     >
+    //       <Text>CREATE TO-DO</Text>
+    //     </Button>
+    //   </Content>
+    // </Container>
   );
 }
 

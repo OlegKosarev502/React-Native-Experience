@@ -1,15 +1,6 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
-import { StyleSheet, Platform, ScrollView } from 'react-native';
-import {
-  Spinner,
-  Container,
-  Text,
-  List,
-  ListItem,
-  Button,
-} from 'native-base';
-import * as Font from 'expo-font';
-import { Icon } from 'react-native-elements'
+import React, { FunctionComponent } from 'react';
+import { StyleSheet, View, ScrollView, Text } from 'react-native';
+import { ListItem, Icon } from 'react-native-elements'
 
 import { ITodo } from '../../interfaces/intrefaces';
 
@@ -24,21 +15,6 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
   showTodoDetails,
   navigation,
 }) => {
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    async function loadFonts() {
-      await Font.loadAsync({
-        Roboto: require('native-base/Fonts/Roboto.ttf'),
-        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-      });
-
-      setIsReady(true);
-    }
-
-    loadFonts();
-  }, []);
-
   const showDetails = (todo: ITodo): void => {
     showTodoDetails(todo);
     navigation.navigate("Details");
@@ -48,77 +24,66 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
     navigation.navigate("Form");
   };
 
-  const renderListItems = (todos: ITodo[]): React.ReactNode => {
-    if (!todos) {
-      return null;
+  const getNotesInfo = (): string => {
+    if (!todos || !todos.length) {
+      return "No Records";
     }
 
-    return todos.map((todo, index) => {
+    return todos.length === 1 ? "One Note" : `${todos.length} Notes`; 
+  };
+
+  const renderListItems = (todos: ITodo[]): React.ReactNode => {
+    return todos && todos.map((todo, index) => {
       return (
         <ListItem
           key={index}
-          button={true}
+          title={todo.title}
           onPress={() => showDetails(todo)}
-        >
-          <Text>
-            {todo.title}
-          </Text>
-        </ListItem>
+          bottomDivider
+        />
       );
     });
   };
 
-  if (!isReady) {
-    return (
-      <Spinner style={styles.spiner}/>
-    );
-  }
-
   return (
-    <Container >
-      <ScrollView style={styles.scrollView}>
-        <List>
-          {renderListItems(todos)}
-        </List>
+    <View style={styles.container}>
+      <ScrollView style={styles.list}>
+        {renderListItems(todos)}
       </ScrollView>
 
-      {Platform.OS === "ios" && (
-        <Button block onPress={openTodoForm} style={styles.iosButton}>
-          <Text>Add To-Do</Text>
-        </Button>
-      ) || (
+      <View style={styles.footer}>
+        <Text>
+          {getNotesInfo()}
+        </Text>
+
         <Icon
           raised
           name="plus"
           type="font-awesome"
           color="#f50"
-          size={26}
           onPress={openTodoForm}
-          containerStyle={styles.androidIcon}
+          containerStyle={styles.icon}
         />
-      )}
-    </Container>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  spiner: {
-    flex: 1,
-    alignSelf: "center",
+  container: {
+    height: "100%",
   },
-  scrollView: {
-    maxHeight: "85%",
+  list: {
+    height: "86%",
     overflow: "hidden",
   },
-  androidIcon: {
-    position: "absolute",
-    bottom: "2%",
-    right: "4%",
+  footer: {
+    height: "14%",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  iosButton: {
-    marginTop: 20,
-    marginLeft: 16,
-    marginRight: 16,
-    backgroundColor: "#f50",
+  icon: {
+    position: "absolute",
+    right: "4%",
   },
 });

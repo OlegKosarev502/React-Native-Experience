@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import {
   Container,
   Content,
   H1,
-  Text,
+  // Text,
   Card,
   CardItem,
   Body,
@@ -26,41 +26,44 @@ export const TodoDetails: FunctionComponent<ITodoDetailsProps> = ({
 }) => {
   const complete = () => {
     completeTodo(data);
-    navigation.navigate("List");
+    navigation.navigate("Notes");
   };
 
   return (
-    <Container>
-      <Content style={styles.content}>
-        <H1 style={styles.header}>
-          { data.title }
-        </H1>
+    <Text>
+      Details
+    </Text>
+    // <Container>
+    //   <Content style={styles.content}>
+    //     <H1 style={styles.header}>
+    //       { data.title }
+    //     </H1>
 
-        <Card>
-          <CardItem header>
-            <Text style={styles.cardHeader}>
-              Description
-            </Text>
-          </CardItem>
+    //     <Card>
+    //       <CardItem header>
+    //         <Text style={styles.cardHeader}>
+    //           Description
+    //         </Text>
+    //       </CardItem>
 
-          <CardItem>
-            <Body>
-              <Text>
-                { data.description }
-              </Text>
-            </Body>
-          </CardItem>
-        </Card>
+    //       <CardItem>
+    //         <Body>
+    //           <Text>
+    //             { data.description }
+    //           </Text>
+    //         </Body>
+    //       </CardItem>
+    //     </Card>
 
-        <Button
-          block
-          onPress={complete}
-          style={styles.button}
-        >
-          <Text>COMPLETE</Text>
-        </Button>
-      </Content>
-    </Container>
+    //     <Button
+    //       block
+    //       onPress={complete}
+    //       style={styles.button}
+    //     >
+    //       <Text>COMPLETE</Text>
+    //     </Button>
+    //   </Content>
+    // </Container>
   );
 };
 
