@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import {
   Container,
   Content,
@@ -53,10 +53,12 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
           </Item>
         </Form>
 
-        <Picker
-          updateDate={(value) => setDateString(value)}
-          updateTime={(value) => setTimeString(value)}
-        />
+        {Platform.OS !== "ios" && (
+          <Picker
+            updateDate={(value) => setDateString(value)}
+            updateTime={(value) => setTimeString(value)}
+          />
+        )}
 
         <Button
           block
