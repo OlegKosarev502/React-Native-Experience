@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import {
   Container,
   Content,
@@ -8,8 +8,9 @@ import {
   Input,
   Label,
   Button,
-  Text
+  Text,
 } from 'native-base';
+import { Picker } from '../DateTimePicker/picker';
 
 interface ITodoFormProps {
   addTodo: any;
@@ -22,11 +23,15 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [dateString, setDateString] = useState('');
+  const [timeString, setTimeString] = useState('');
 
   const createTodo = (): void => {
     const data = {
       title,
       description,
+      date: dateString,
+      time: timeString,
     };
     
     addTodo(data);
@@ -42,11 +47,18 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
             <Input onChangeText={value => setTitle(value)} />
           </Item>
 
-          <Item stackedLabel last>
+          <Item stackedLabel>
             <Label>Description</Label>
             <Input onChangeText={value => setDescription(value)} />
           </Item>
         </Form>
+
+        {Platform.OS !== "ios" && (
+          <Picker
+            updateDate={(value) => setDateString(value)}
+            updateTime={(value) => setTimeString(value)}
+          />
+        )}
 
         <Button
           block
