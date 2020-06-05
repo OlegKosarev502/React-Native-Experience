@@ -6,18 +6,63 @@ import { IAppState, ITodo } from '../interfaces/intrefaces';
 const todosInitialState: ITodo[] = [
   {
     id: 0,
-    title: "Learn React-Native",
+    title: "React-Native",
     description: "React Native combines the best parts of native development with React, a best-in-class JavaScript library for building user interfaces.",
   },
   {
     id: 1,
-    title: "Learn Java",
+    title: "Java",
     description: "Java is a general-purpose programming language that is class-based, object-oriented, and designed to have as few implementation dependencies as possible.",
   },
   {
     id: 2,
-    title: "Learn Kotlin",
+    title: "Kotlin",
     description: "Kotlin is a cross-platform, statically typed, general-purpose programming language with type inference. Kotlin is designed to interoperate fully with Java, and the JVM version of its standard library depends on the Java Class Library, but type inference allows its syntax to be more concise.",
+  },
+  {
+    id: 3,
+    title: "Swift",
+    description: "...",
+  },
+  {
+    id: 4,
+    title: "Objective-C",
+    description: "...",
+  },
+  {
+    id: 5,
+    title: "Flutter",
+    description: "...",
+  },
+  {
+    id: 6,
+    title: "Angular",
+    description: "...",
+  },
+  {
+    id: 7,
+    title: "Vue",
+    description: "...",
+  },
+  {
+    id: 8,
+    title: "Deno",
+    description: "...",
+  },
+  {
+    id: 9,
+    title: "Node.JS",
+    description: "...",
+  },
+  {
+    id: 10,
+    title: "Svelte",
+    description: "...",
+  },
+  {
+    id: 11,
+    title: "Angular.JS",
+    description: "...",
   },
 ];
 

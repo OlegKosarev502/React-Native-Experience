@@ -65,5 +65,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginLeft: 16,
     marginRight: 16,
+    backgroundColor: "#f50",
   },
 });

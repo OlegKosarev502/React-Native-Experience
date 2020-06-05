@@ -1,15 +1,15 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform, ScrollView } from 'react-native';
 import {
   Spinner,
   Container,
-  Content,
   Text,
   List,
   ListItem,
-  Button
+  Button,
 } from 'native-base';
 import * as Font from 'expo-font';
+import { Icon } from 'react-native-elements'
 
 import { ITodo } from '../../interfaces/intrefaces';
 
@@ -75,20 +75,28 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
   }
 
   return (
-    <Container>
-      <Content>
+    <Container >
+      <ScrollView style={styles.scrollView}>
         <List>
-          <ListItem itemHeader>
-            <Text>TO-DO LIST</Text>
-          </ListItem>
-
           {renderListItems(todos)}
         </List>
+      </ScrollView>
 
-        <Button block onPress={openTodoForm} style={styles.button}>
+      {Platform.OS === "ios" && (
+        <Button block onPress={openTodoForm} style={styles.iosButton}>
           <Text>Add To-Do</Text>
         </Button>
-      </Content>
+      ) || (
+        <Icon
+          raised
+          name="plus"
+          type="font-awesome"
+          color="#f50"
+          size={26}
+          onPress={openTodoForm}
+          containerStyle={styles.androidIcon}
+        />
+      )}
     </Container>
   );
 };
@@ -96,11 +104,21 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
 const styles = StyleSheet.create({
   spiner: {
     flex: 1,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
-  button: {
-    marginTop: 32,
+  scrollView: {
+    maxHeight: "85%",
+    overflow: "hidden",
+  },
+  androidIcon: {
+    position: "absolute",
+    bottom: "2%",
+    right: "4%",
+  },
+  iosButton: {
+    marginTop: 20,
     marginLeft: 16,
     marginRight: 16,
+    backgroundColor: "#f50",
   },
 });
