@@ -1,14 +1,6 @@
-import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet, Platform, Text } from 'react-native';
-import {
-  Container,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  Button,
-} from 'native-base';
+import React, { FunctionComponent, useState, useEffect } from 'react';
+import { Keyboard, StyleSheet, View, TextInput } from 'react-native';
+import { Input, Icon } from 'react-native-elements';
 import { Picker } from '../DateTimePicker/picker';
 
 interface ITodoFormProps {
@@ -20,17 +12,32 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
   addTodo,
   navigation,
 }) => {
-  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [dateString, setDateString] = useState('');
-  const [timeString, setTimeString] = useState('');
+  const [isFooterVisible, setFooterVisibility] = useState(true);
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+    };
+  }, []);
+
+  const _keyboardDidShow = () => {
+    setFooterVisibility(false);
+  };
+
+  const _keyboardDidHide = () => {
+    setFooterVisibility(true);
+  };
 
   const createTodo = (): void => {
     const data = {
-      title,
+      title: "...",
       description,
-      date: dateString,
-      time: timeString,
     };
     
     addTodo(data);
@@ -38,45 +45,53 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
   };
 
   return (
-    <Text>Form</Text>
-    // <Container>
-    //   <Content>
-    //     <Form>
-    //       <Item stackedLabel>
-    //         <Label>Title</Label>
-    //         <Input onChangeText={value => setTitle(value)} />
-    //       </Item>
+    <View style={styles.container}>
+      <View style={styles.form}>
+        <TextInput
+          multiline={true}
+          placeholder="Description"
+          onChangeText={value => setDescription(value)}
+          onSubmitEditing={Keyboard.dismiss}
+        />
+      </View>
 
-    //       <Item stackedLabel>
-    //         <Label>Description</Label>
-    //         <Input onChangeText={value => setDescription(value)} />
-    //       </Item>
-    //     </Form>
+      {isFooterVisible && (
+        <View style={styles.footer}>
+          <Icon
+            raised
+            type="font-awesome"
+            name="image"
+            color="#f50"
+            onPress={createTodo}
+          />
 
-    //     {Platform.OS !== "ios" && (
-    //       <Picker
-    //         updateDate={(value) => setDateString(value)}
-    //         updateTime={(value) => setTimeString(value)}
-    //       />
-    //     )}
-
-    //     <Button
-    //       block
-    //       onPress={createTodo}
-    //       style={styles.button}
-    //     >
-    //       <Text>CREATE TO-DO</Text>
-    //     </Button>
-    //   </Content>
-    // </Container>
+          <Icon
+            raised
+            type="font-awesome"
+            name="check"
+            color="#f50"
+            onPress={createTodo}
+          />
+        </View>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
-    marginTop: 32,
-    marginLeft: 16,
-    marginRight: 16,
-    backgroundColor: "#f50",
+  container: {
+    height: "100%",
+  },
+  form: {
+    flex: 1,
+    padding: 10,
+    paddingTop: 20,
+    backgroundColor: "white",
+  },
+  footer: {
+    height: "14%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
 });

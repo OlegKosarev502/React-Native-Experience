@@ -1,15 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import { StyleSheet, Text } from 'react-native';
-import {
-  Container,
-  Content,
-  H1,
-  // Text,
-  Card,
-  CardItem,
-  Body,
-  Button
-} from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import { Text, Icon } from 'react-native-elements';
 
 import { ITodo } from '../../interfaces/intrefaces';
 
@@ -30,57 +21,50 @@ export const TodoDetails: FunctionComponent<ITodoDetailsProps> = ({
   };
 
   return (
-    <Text>
-      Details
-    </Text>
-    // <Container>
-    //   <Content style={styles.content}>
-    //     <H1 style={styles.header}>
-    //       { data.title }
-    //     </H1>
+    <View style={styles.container}>
+      <View style={styles.content}>
+        <Text h1>
+          {data.title}
+        </Text>
 
-    //     <Card>
-    //       <CardItem header>
-    //         <Text style={styles.cardHeader}>
-    //           Description
-    //         </Text>
-    //       </CardItem>
+        <Text style={styles.description}>
+          {data.description}
+        </Text>
+      </View>
 
-    //       <CardItem>
-    //         <Body>
-    //           <Text>
-    //             { data.description }
-    //           </Text>
-    //         </Body>
-    //       </CardItem>
-    //     </Card>
-
-    //     <Button
-    //       block
-    //       onPress={complete}
-    //       style={styles.button}
-    //     >
-    //       <Text>COMPLETE</Text>
-    //     </Button>
-    //   </Content>
-    // </Container>
+      <View style={styles.footer}>
+        <Icon
+          raised
+          type="font-awesome"
+          name="close"
+          color="#f50"
+          onPress={complete}
+          containerStyle={styles.icon}
+        />
+      </View>      
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+  },
   content: {
-    marginTop: 16,
-    marginLeft: 16,
-    marginRight: 16,
+    height: "86%",
+    padding: 10,
+    backgroundColor: "white"
   },
-  header: {
-    marginBottom: 8,
+  footer: {
+    height: "14%",
+    justifyContent: "center",
   },
-  cardHeader: {
-    fontWeight: "700",
+  icon: {
+    position: "absolute",
+    right: "4%",
   },
-  button: {
-    marginTop: 32,
-    backgroundColor: "#f50",
-  },
+  description: {
+    marginTop: 12,
+    fontSize: 16,
+  }
 });

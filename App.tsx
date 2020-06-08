@@ -49,7 +49,7 @@ export default function App() {
             
               return (
                 <Header
-                  placement="left"
+                  placement="center"
                   leftComponent={
                     previous && <LeftComponent goBack={navigation.goBack} />
                   }
