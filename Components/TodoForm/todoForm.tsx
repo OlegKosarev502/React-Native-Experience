@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
+import moment from 'moment';
 import { Keyboard, StyleSheet, View, TextInput } from 'react-native';
-import { Input, Icon } from 'react-native-elements';
-import { Picker } from '../DateTimePicker/picker';
+import { Icon } from 'react-native-elements';
 
 interface ITodoFormProps {
   addTodo: any;
@@ -12,6 +12,7 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
   addTodo,
   navigation,
 }) => {
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isFooterVisible, setFooterVisibility] = useState(true);
 
@@ -36,8 +37,9 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
 
   const createTodo = (): void => {
     const data = {
-      title: "...",
-      description,
+      title: title || "No title",
+      description: description || "No description",
+      creationDate: moment(),
     };
     
     addTodo(data);
@@ -48,10 +50,20 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
     <View style={styles.container}>
       <View style={styles.form}>
         <TextInput
+          value={title}
+          placeholder="Title"
+          onChangeText={value => setTitle(value)}
+          onSubmitEditing={Keyboard.dismiss}
+          style={styles.title}
+        />
+
+        <TextInput
+          value={description}
           multiline={true}
           placeholder="Description"
           onChangeText={value => setDescription(value)}
           onSubmitEditing={Keyboard.dismiss}
+          style={styles.description}
         />
       </View>
 
@@ -84,9 +96,16 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
-    padding: 10,
-    paddingTop: 20,
+    padding: 20,
     backgroundColor: "white",
+  },
+  title: {
+    marginBottom: 12,
+    fontSize: 32,
+    fontWeight: "700",
+  },
+  description: {
+    fontSize: 16,
   },
   footer: {
     height: "14%",

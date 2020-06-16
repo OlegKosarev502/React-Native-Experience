@@ -33,7 +33,7 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
   };
 
   const openTodoForm = (): void => {
-    navigation.navigate("Form");
+    navigation.navigate("New note");
   };
 
   const getNotesInfo = (): string => {
@@ -75,6 +75,7 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
                 <TouchableOpacity
                   style={styles.itemContent}
                   onPress={() => showDetails(item)}
+                  activeOpacity={0.5}
                 >
                   <Text style={styles.itemTitle}>
                     {item.title}
@@ -82,6 +83,10 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
 
                   <Text numberOfLines={8}>
                     {item.description}
+                  </Text>
+
+                  <Text style={styles.itemDate}>
+                    {item.creationDate.format('MMM DD, YYYY')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -141,12 +146,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "#ccc",
-    borderRadius: 30,
+    borderRadius: 20,
   },
   itemTitle: {
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 6,
+  },
+  itemDate: {
+    position: "absolute",
+    bottom: 12,
+    left: 12,
+    fontSize: 12,
+    color: "gray",
   },
   footer: {
     height: "14%",

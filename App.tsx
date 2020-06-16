@@ -54,7 +54,7 @@ export default function App() {
                     previous && <LeftComponent goBack={navigation.goBack} />
                   }
                   centerComponent={{ text: title as string, style: { fontSize: 24, color: "white" } }}
-                  rightComponent={{ icon: "menu", color: "white" }}
+                  rightComponent={{ icon: "search", color: "white" }}
                   containerStyle={Platform.OS === "android" ? { justifyContent: "center", alignItems:"center", height: 60, paddingTop: 0} : {}}
                   backgroundColor="#f50"
                 />
@@ -73,9 +73,9 @@ export default function App() {
             options={{ title: "Details" }}
           />
           <Stack.Screen
-            name="Form"
+            name="New note"
             component={TodoFormContainer}
-            options={{ title: "Form" }}
+            options={{ title: "New note" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
