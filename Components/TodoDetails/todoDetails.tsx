@@ -2,21 +2,21 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Icon } from 'react-native-elements';
 
-import { ITodo } from '../../interfaces/intrefaces';
+import { INote } from '../../interfaces/intrefaces';
 
-interface ITodoDetailsProps {
-  data: ITodo;
-  completeTodo: (todo: ITodo) => any;
+interface INoteDetailsProps {
+  data: INote;
+  removeNote: (todo: INote) => any;
   navigation: any;
 }
 
-export const TodoDetails: FunctionComponent<ITodoDetailsProps> = ({
+export const TodoDetails: FunctionComponent<INoteDetailsProps> = ({
   data,
-  completeTodo,
+  removeNote,
   navigation,
 }) => {
   const complete = () => {
-    completeTodo(data);
+    removeNote(data);
     navigation.navigate("Notes");
   };
 

@@ -1,12 +1,21 @@
 import { connect } from 'react-redux';
 
+import { IAppState } from '../../interfaces/intrefaces';
 import { TodoForm } from './todoForm';
-import { addTodo } from '../../store/actions';
+import { addNote, removeNote } from '../../store/actions';
+
+const mapStateToProps = (state: IAppState) => {
+  return {
+    formState: state.noteFormState,
+    note: state.todoDetails,
+  };
+};
 
 const mapDispatchToProps = {
-  addTodo,
+  addNote,
+  removeNote,
 };
 
 export const TodoFormContainer = connect(
-  null, mapDispatchToProps
+  mapStateToProps, mapDispatchToProps
 )(TodoForm); 

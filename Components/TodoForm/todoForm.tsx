@@ -3,17 +3,27 @@ import moment from 'moment';
 import { Keyboard, StyleSheet, View, TextInput } from 'react-native';
 import { Icon } from 'react-native-elements';
 
-interface ITodoFormProps {
-  addTodo: any;
+import { INote, NoteFormStates } from '../../interfaces/intrefaces';
+
+interface INoteFormProps {
+  formState: NoteFormStates;
+  note: INote;
+  addNote: any;
   navigation: any;
 }
 
-export const TodoForm: FunctionComponent<ITodoFormProps> = ({
-  addTodo,
+export const TodoForm: FunctionComponent<INoteFormProps> = ({
+  formState,
+  note,
+  addNote,
   navigation,
 }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState(
+    formState === NoteFormStates.edit ? note.title : ''
+  );
+  const [description, setDescription] = useState(
+    formState === NoteFormStates.edit ? note.description : ''
+  );
   const [isFooterVisible, setFooterVisibility] = useState(true);
 
   useEffect(() => {
@@ -42,7 +52,7 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({
       creationDate: moment(),
     };
     
-    addTodo(data);
+    addNote(data);
     navigation.navigate("Notes");
   };
 

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { TodoDetails } from './todoDetails';
-import { completeTodo } from '../../store/actions';
+import { removeNote } from '../../store/actions';
 import { IAppState } from '../../interfaces/intrefaces';
 
 const mapStateToProps = (state: IAppState) => {
@@ -11,7 +11,7 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-  completeTodo,
+  removeNote,
 };
 
 export const TodoDetailsContainer = connect(

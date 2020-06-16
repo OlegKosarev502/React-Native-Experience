@@ -2,55 +2,59 @@ import React, { FunctionComponent, useState } from 'react';
 import { StyleSheet, View, ScrollView, Text, TouchableOpacity, FlatList } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements'
 
-import { ITodo } from '../../interfaces/intrefaces';
+import { INote, NoteFormStates } from '../../interfaces/intrefaces';
 
-enum Display {
+enum DisplayOptions {
   list = "list",
   grid = "grid",
 }
 
-interface ITodoListProps {
-  todos: ITodo[];
-  showTodoDetails: (todo: ITodo) => any;
+interface INoteListProps {
+  notes: INote[];
+  showTodoDetails: (todo: INote) => any;
+  updateFormState: any;
   navigation: any;
 }
 
-export const TodoList: FunctionComponent<ITodoListProps> = ({
-  todos,
+export const NoteList: FunctionComponent<INoteListProps> = ({
+  notes,
   showTodoDetails,
+  updateFormState,
   navigation,
 }) => {
-  const [display, setDisplay] = useState(Display.list);
+  const [display, setDisplay] = useState(DisplayOptions.list);
 
   const updateDisplay = () => {
-    const newDisplay = display === Display.list ? Display.grid : Display.list;
+    const newDisplay = display === DisplayOptions.list ? DisplayOptions.grid : DisplayOptions.list;
     return setDisplay(newDisplay);
   };
 
-  const showDetails = (todo: ITodo): void => {
+  const showDetails = (todo: INote): void => {
+    updateFormState(NoteFormStates.edit);
     showTodoDetails(todo);
     navigation.navigate("Details");
   };
 
   const openTodoForm = (): void => {
+    updateFormState(NoteFormStates.create);
     navigation.navigate("New note");
   };
 
   const getNotesInfo = (): string => {
-    if (!todos || !todos.length) {
+    if (!notes || !notes.length) {
       return "No Records";
     }
 
-    return todos.length === 1 ? "One Note" : `${todos.length} Notes`; 
+    return notes.length === 1 ? "One Note" : `${notes.length} Notes`; 
   };
 
-  const renderListItems = (todos: ITodo[]): React.ReactNode => {
-    return todos && todos.map((todo, index) => {
+  const renderListItems = (notes: INote[]): React.ReactNode => {
+    return notes && notes.map((note, index) => {
       return (
         <ListItem
           key={index}
-          title={todo.title}
-          onPress={() => showDetails(todo)}
+          title={note.title}
+          onPress={() => showDetails(note)}
           bottomDivider
         />
       );
@@ -59,13 +63,13 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
 
   return (
     <View style={styles.container}>
-      {display === Display.list && (
+      {display === DisplayOptions.list && (
         <ScrollView>
-          {renderListItems(todos)}
+          {renderListItems(notes)}
         </ScrollView>
       ) || (
         <FlatList
-          data={todos}
+          data={notes}
           renderItem={({ item, index }) => {
             return (
               <View
@@ -101,7 +105,7 @@ export const TodoList: FunctionComponent<ITodoListProps> = ({
       <View style={styles.footer}>
         <Icon
           raised
-          name={display === Display.list ? "table" : "list"}
+          name={display === DisplayOptions.list ? "table" : "list"}
           type="font-awesome"
           color="#f50"
           onPress={updateDisplay}

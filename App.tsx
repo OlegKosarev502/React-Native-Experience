@@ -6,9 +6,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { store } from './store/store';
-import { TodoListContainer } from './Components/TodoList/todoListContainer';
-import { TodoDetailsContainer } from './Components/TodoDetails/todoDetailsContainer';
-import { TodoFormContainer } from './Components/TodoForm/todoFormContainer';
+import { NoteListContainer } from './components/noteList/noteListContainer';
+// import { TodoDetailsContainer } from './components/TodoDetails/todoDetailsContainer';
+import { TodoFormContainer } from './components/TodoForm/todoFormContainer';
 
 import { Header, Icon } from 'react-native-elements';
 
@@ -64,12 +64,12 @@ export default function App() {
         >
           <Stack.Screen
             name="Notes"
-            component={TodoListContainer}
+            component={NoteListContainer}
             options={{ title: "Notes" }}
           />
           <Stack.Screen
             name="Details"
-            component={TodoDetailsContainer}
+            component={TodoFormContainer}
             options={{ title: "Details" }}
           />
           <Stack.Screen

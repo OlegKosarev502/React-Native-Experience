@@ -2,9 +2,9 @@ import { combineReducers, Reducer, CombinedState } from 'redux';
 import moment from 'moment';
 
 import { actionTypes } from './actions';
-import { IAppState, ITodo } from '../interfaces/intrefaces';
+import { IAppState, INote } from '../interfaces/intrefaces';
 
-const todosInitialState: ITodo[] = [
+const notesInitialState: INote[] = [
   {
     id: 0,
     title: "React-Native",
@@ -79,11 +79,11 @@ const todosInitialState: ITodo[] = [
   },
 ];
 
-const todos = (state = todosInitialState, action: any) => {
+const notes = (state = notesInitialState, action: any) => {
   switch(action.type) {
-    case actionTypes.ADD_TODO:
+    case actionTypes.ADD_NOTE:
       return [...state, action.payload];
-    case actionTypes.COMPLETE_TODO:
+    case actionTypes.REMOVE_NOTE:
       return state.filter(todo => todo.id !== action.payload.id);
     default:
       return state;
@@ -99,7 +99,17 @@ const todoDetails = (state = null, action: any) => {
   }
 };
 
+const noteFormState = (state = null, action: any) => {
+  switch(action.type) {
+    case actionTypes.UPDATE_FORM_STATE:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export const rootReducer: Reducer<CombinedState<IAppState>, any> = combineReducers({
-  todos,
+  notes,
   todoDetails,
+  noteFormState,
 });
