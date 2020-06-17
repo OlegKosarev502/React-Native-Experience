@@ -7,12 +7,12 @@ export enum NoteFormStates {
 
 export interface IAppState {
   notes: INote[];
-  todoDetails: INote;
+  noteToDipslay: INote;
   noteFormState: NoteFormStates;
 }
 
 export interface INote {
-  id: number;
+  id: string;
   title: string;
   description?: string;
   creationDate: Moment;

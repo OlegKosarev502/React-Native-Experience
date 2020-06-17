@@ -1,9 +1,10 @@
-import { INote } from '../interfaces/intrefaces';
+import { INote, NoteFormStates } from '../interfaces/intrefaces';
 
 export const actionTypes = {
   ADD_NOTE: "ADD_NOTE",
   REMOVE_NOTE: "REMOVE_NOTE",
-  SHOW_TODO_DETAILS: "SHOW_TODO_DETAILS",
+  UPDATE_NOTE: "UPDATE_NOTE",
+  SET_NOTE_TO_DISPLAY: "SET_NOTE_TO_DISPLAY",
   UPDATE_FORM_STATE: "UPDATE_FORM_STATE",
 };
 
@@ -14,21 +15,28 @@ export const addNote = (note: INote) => {
   };
 };
 
-export const removeNote = (todo: INote) => {
+export const removeNote = (noteId: string) => {
   return {
     type: actionTypes.REMOVE_NOTE,
-    payload: todo,
+    payload: noteId,
   };
 };
 
-export const showTodoDetails = (todo: INote) => {
+export const updateNote = (note: INote) => {
   return {
-    type: actionTypes.SHOW_TODO_DETAILS,
-    payload: todo,
+    type: actionTypes.UPDATE_NOTE,
+    payload: note,
   };
 };
 
-export const updateFormState = (state: string) => {
+export const setNoteToDisplay = (note: INote) => {
+  return {
+    type: actionTypes.SET_NOTE_TO_DISPLAY,
+    payload: note,
+  };
+};
+
+export const updateFormState = (state: NoteFormStates) => {
   return {
     type: actionTypes.UPDATE_FORM_STATE,
     payload: state,

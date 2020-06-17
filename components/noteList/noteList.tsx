@@ -11,14 +11,14 @@ enum DisplayOptions {
 
 interface INoteListProps {
   notes: INote[];
-  showTodoDetails: (todo: INote) => any;
-  updateFormState: any;
+  setNoteToDisplay: (note: INote) => any;
+  updateFormState: (state: NoteFormStates) => any;
   navigation: any;
 }
 
 export const NoteList: FunctionComponent<INoteListProps> = ({
   notes,
-  showTodoDetails,
+  setNoteToDisplay,
   updateFormState,
   navigation,
 }) => {
@@ -29,9 +29,9 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
     return setDisplay(newDisplay);
   };
 
-  const showDetails = (todo: INote): void => {
+  const showDetails = (note: INote): void => {
     updateFormState(NoteFormStates.edit);
-    showTodoDetails(todo);
+    setNoteToDisplay(note);
     navigation.navigate("Details");
   };
 

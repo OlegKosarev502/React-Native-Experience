@@ -7,8 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { store } from './store/store';
 import { NoteListContainer } from './components/noteList/noteListContainer';
-// import { TodoDetailsContainer } from './components/TodoDetails/todoDetailsContainer';
-import { TodoFormContainer } from './components/TodoForm/todoFormContainer';
+import { TodoFormContainer } from './components/noteForm/noteFormContainer';
 
 import { Header, Icon } from 'react-native-elements';
 

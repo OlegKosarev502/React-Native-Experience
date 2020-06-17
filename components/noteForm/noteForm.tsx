@@ -4,18 +4,23 @@ import { Keyboard, StyleSheet, View, TextInput } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import { INote, NoteFormStates } from '../../interfaces/intrefaces';
+import { uuidv4 } from '../../shared/uuid';
 
 interface INoteFormProps {
   formState: NoteFormStates;
   note: INote;
-  addNote: any;
+  addNote: (note: INote) => any;
+  removeNote: (noteId: string) => any;
+  updateNote: (note: INote) => any;
   navigation: any;
 }
 
-export const TodoForm: FunctionComponent<INoteFormProps> = ({
+export const NoteForm: FunctionComponent<INoteFormProps> = ({
   formState,
   note,
   addNote,
+  removeNote,
+  updateNote,
   navigation,
 }) => {
   const [title, setTitle] = useState(
@@ -45,14 +50,29 @@ export const TodoForm: FunctionComponent<INoteFormProps> = ({
     setFooterVisibility(true);
   };
 
-  const createTodo = (): void => {
+  const addRecord = (): void => {
     const data = {
+      id: uuidv4(),
       title: title || "No title",
       description: description || "No description",
       creationDate: moment(),
     };
     
     addNote(data);
+    navigation.navigate("Notes");
+  };
+
+  const removeRecord = (): void => {    
+    removeNote(note.id);
+    navigation.navigate("Notes");
+  };
+
+  const updateRecord = (): void => {
+    const data = Object.assign({}, note);
+    data.title = title;
+    data.description = description;
+
+    updateNote(data);
     navigation.navigate("Notes");
   };
 
@@ -79,20 +99,22 @@ export const TodoForm: FunctionComponent<INoteFormProps> = ({
 
       {isFooterVisible && (
         <View style={styles.footer}>
-          <Icon
-            raised
-            type="font-awesome"
-            name="image"
-            color="#f50"
-            onPress={createTodo}
-          />
+          {formState === NoteFormStates.edit && (
+            <Icon
+              raised
+              type="font-awesome"
+              name="close"
+              color="#f50"
+              onPress={removeRecord}
+            />
+          )}
 
           <Icon
             raised
             type="font-awesome"
-            name="check"
+            name={formState === NoteFormStates.create ? "check" : "save"}
             color="#f50"
-            onPress={createTodo}
+            onPress={formState === NoteFormStates.create ? addRecord : updateRecord}
           />
         </View>
       )}
