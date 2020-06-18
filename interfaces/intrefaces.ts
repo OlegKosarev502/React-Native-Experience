@@ -1,12 +1,19 @@
-export interface IAppState {
-  todos: ITodo[];
-  todoDetails: ITodo;
+import { Moment } from "moment";
+
+export enum NoteFormStates {
+  create = "create",
+  edit = "edit",
 }
 
-export interface ITodo {
-  id: number;
+export interface IAppState {
+  notes: INote[];
+  noteToDipslay: INote;
+  noteFormState: NoteFormStates;
+}
+
+export interface INote {
+  id: string;
   title: string;
   description?: string;
-  date?: string;
-  time?: string;
+  creationDate: Moment;
 }
