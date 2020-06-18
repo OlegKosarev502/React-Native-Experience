@@ -85,7 +85,7 @@ const notes = (state = notesInitialState, action: any) => {
       return [...state, action.payload];
     case actionTypes.REMOVE_NOTE:
       return state.filter(
-        todo => todo.id !== action.payload
+        note => note.id !== action.payload
       );
     case actionTypes.UPDATE_NOTE:
         return state.map(

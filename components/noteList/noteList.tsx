@@ -35,7 +35,7 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
     navigation.navigate("Details");
   };
 
-  const openTodoForm = (): void => {
+  const openNoteForm = (): void => {
     updateFormState(NoteFormStates.create);
     navigation.navigate("New note");
   };
@@ -120,7 +120,7 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
           name="plus"
           type="font-awesome"
           color="#f50"
-          onPress={openTodoForm}
+          onPress={openNoteForm}
         />
       </View>
     </View>

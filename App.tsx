@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { store } from './store/store';
 import { NoteListContainer } from './components/noteList/noteListContainer';
-import { TodoFormContainer } from './components/noteForm/noteFormContainer';
+import { NoteFormContainer } from './components/noteForm/noteFormContainer';
 
 import { Header, Icon } from 'react-native-elements';
 
@@ -42,10 +42,8 @@ export default function App() {
               const title =
                 options.headerTitle !== undefined
                   ? options.headerTitle
-                  : options.title !== undefined
-                  ? options.title
-                  : scene.route.name;
-            
+                  : options.title !== undefined ? options.title : scene.route.name;
+
               return (
                 <Header
                   placement="center"
@@ -68,12 +66,12 @@ export default function App() {
           />
           <Stack.Screen
             name="Details"
-            component={TodoFormContainer}
+            component={NoteFormContainer}
             options={{ title: "Details" }}
           />
           <Stack.Screen
             name="New note"
-            component={TodoFormContainer}
+            component={NoteFormContainer}
             options={{ title: "New note" }}
           />
         </Stack.Navigator>

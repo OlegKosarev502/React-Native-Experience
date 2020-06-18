@@ -17,6 +17,6 @@ const mapDispatchToProps = {
   updateNote,
 };
 
-export const TodoFormContainer = connect(
+export const NoteFormContainer = connect(
   mapStateToProps, mapDispatchToProps
 )(NoteForm); 
