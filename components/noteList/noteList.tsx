@@ -7,8 +7,6 @@ import { INote, NoteFormStates } from '../../interfaces/intrefaces';
 import { PreviewList } from '../previewList/PreviewList';
 import { SimpleList } from '../simpleList/SimpleList';
 
-// import { addNotes } from '../../store/actions';
-
 enum DisplayOptions {
     list = "list",
     grid = "grid",
@@ -16,7 +14,7 @@ enum DisplayOptions {
 
 interface INoteListProps {
     notes: INote[];
-    addNotes: any;
+    setNotes: (notes: INote[] | []) => any;
     setNoteToDisplay: (note: INote) => any;
     updateFormState: (state: NoteFormStates) => any;
     navigation: any;
@@ -37,13 +35,18 @@ export class NoteList extends React.Component<INoteListProps, INoteListState> {
     async componentDidMount() {
         try {
             const jsonValue = await AsyncStorage.getItem('@notes');
-            const result = jsonValue != null ? JSON.parse(jsonValue) : null;
-            // addNotes([result]);
-            console.log(result);
-        } catch (e) {
+            const result = jsonValue != null ? JSON.parse(jsonValue) : [];
+
+            const value: INote[] | [] = Array.isArray(result) ? result : [result];
+            this.props.setNotes(value);
+        } catch(error) {
             console.log('Failed to load notes...');
         }
     }
+
+    // componentDidUpdate() {
+    //     console.log(this.props.notes);
+    // }
 
     private updateDisplay = () => {
         const newDisplay = this.state.display === DisplayOptions.list ? DisplayOptions.grid : DisplayOptions.list;
@@ -65,22 +68,37 @@ export class NoteList extends React.Component<INoteListProps, INoteListState> {
     };
 
     private getNotesInfo = (): string => {
-        if (!this.props.notes || !this.props.notes.length) {
+        const { notes } = this.props;
+
+        if (!notes || !notes.length) {
             return "No Records";
         }
 
-        return this.props.notes.length === 1 ? "One Note" : `${this.props.notes.length} Notes`;
+        return notes.length === 1 ? "One Note" : `${notes.length} Notes`;
     };
 
-    // const alo = async () => {
+    // private clearAll = async () => {
+    //     try {
+    //         await AsyncStorage.clear();
+    //         this.props.setNotes([]);
+    //     } catch (error) {
+    //         console.log('Failed to clear storage...');
+    //     }
+
+    //     console.log('Done.');
+    // }
+
+    // private refreshNotes = async () => {
     //     try {
     //         const jsonValue = await AsyncStorage.getItem('@notes');
-    //         const result = jsonValue != null ? JSON.parse(jsonValue) : null;
-    //         console.log(result);
-    //     } catch (e) {
+    //         const result = jsonValue != null ? JSON.parse(jsonValue) : [];
+
+    //         const value: INote[] | [] = Array.isArray(result) ? result : [result];
+    //         this.props.setNotes(value);
+    //     } catch(error) {
     //         console.log('Failed to load notes...');
     //     }
-    // };
+    // }
 
     render() {
         return (
@@ -106,9 +124,25 @@ export class NoteList extends React.Component<INoteListProps, INoteListState> {
                         onPress={this.updateDisplay}
                     />
 
+                    {/* <Icon
+                        raised
+                        name="trash"
+                        type="font-awesome"
+                        color="#f50"
+                        onPress={this.clearAll}
+                    /> */}
+
                     <Text>
                         {this.getNotesInfo()}
                     </Text>
+
+                    {/* <Icon
+                        raised
+                        name="refresh"
+                        type="font-awesome"
+                        color="#f50"
+                        onPress={this.refreshNotes}
+                    /> */}
 
                     <Icon
                         raised

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { IAppState } from '../../interfaces/intrefaces';
-import { addNotes, setNoteToDisplay, updateFormState } from '../../store/actions';
+import { setNotes, setNoteToDisplay, updateFormState } from '../../store/actions';
 import { NoteList } from './noteList';
 
 const mapStateToProps = (state: IAppState) => {
@@ -12,7 +12,7 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-    addNotes,
+    setNotes,
     setNoteToDisplay,
     updateFormState,
 };

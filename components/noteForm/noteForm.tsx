@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import moment from 'moment';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from 'react-native-elements';
@@ -10,7 +9,8 @@ import { uuidv4 } from '../../shared/uuid';
 interface INoteFormProps {
     formState: NoteFormStates;
     note: INote;
-    addNote: (note: INote) => any;
+    notes: INote[];
+    setNotes: (note: INote[] | []) => any;
     removeNote: (noteId: string) => any;
     updateNote: (note: INote) => any;
     navigation: any;
@@ -19,7 +19,8 @@ interface INoteFormProps {
 export const NoteForm: FunctionComponent<INoteFormProps> = ({
     formState,
     note,
-    addNote,
+    notes,
+    setNotes,
     removeNote,
     updateNote,
     navigation,
@@ -51,12 +52,12 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
         setFooterVisibility(true);
     };
 
-    const storeNote = async (note: INote) => {
+    const saveNotesInStorage = async (newNotes: INote[] | []) => {
         try {
-            const jsonValue = JSON.stringify(note)
-            await AsyncStorage.setItem('@notes', jsonValue)
+            const jsonValue = JSON.stringify(newNotes);
+            await AsyncStorage.setItem('@notes', jsonValue);
         } catch (e) {
-            console.log('Failed to save note...');
+            console.log('Failed to save notes...');
         }
     };
 
@@ -65,12 +66,13 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
             id: uuidv4(),
             title: title || "No title",
             description: description || "No description",
-            creationDate: moment(),
+            creationDate: new Date().toISOString(),
         };
 
-        addNote(data);
+        const newNotes = [...notes, data];
 
-        await storeNote(data);
+        setNotes(newNotes);
+        await saveNotesInStorage(newNotes);
 
         navigation.navigate("Notes");
     };

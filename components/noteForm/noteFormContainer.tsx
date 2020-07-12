@@ -2,17 +2,18 @@ import { connect } from 'react-redux';
 
 import { IAppState } from '../../interfaces/intrefaces';
 import { NoteForm } from './noteForm';
-import { addNote, removeNote, updateNote } from '../../store/actions';
+import { setNotes, removeNote, updateNote } from '../../store/actions';
 
 const mapStateToProps = (state: IAppState) => {
     return {
         formState: state.noteFormState,
         note: state.noteToDipslay,
+        notes: state.notes,
     };
 };
 
 const mapDispatchToProps = {
-    addNote,
+    setNotes,
     removeNote,
     updateNote,
 };
