@@ -1,175 +1,138 @@
-import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity, FlatList } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements'
+import AsyncStorage from '@react-native-community/async-storage';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import { INote, NoteFormStates } from '../../interfaces/intrefaces';
+import { PreviewList } from '../previewList/PreviewList';
+import { SimpleList } from '../simpleList/SimpleList';
+
+// import { addNotes } from '../../store/actions';
 
 enum DisplayOptions {
-  list = "list",
-  grid = "grid",
+    list = "list",
+    grid = "grid",
 }
 
 interface INoteListProps {
-  notes: INote[];
-  setNoteToDisplay: (note: INote) => any;
-  updateFormState: (state: NoteFormStates) => any;
-  navigation: any;
+    notes: INote[];
+    addNotes: any;
+    setNoteToDisplay: (note: INote) => any;
+    updateFormState: (state: NoteFormStates) => any;
+    navigation: any;
 }
 
-export const NoteList: FunctionComponent<INoteListProps> = ({
-  notes,
-  setNoteToDisplay,
-  updateFormState,
-  navigation,
-}) => {
-  const [display, setDisplay] = useState(DisplayOptions.list);
+interface INoteListState {
+    display: DisplayOptions;
+}
 
-  const updateDisplay = () => {
-    const newDisplay = display === DisplayOptions.list ? DisplayOptions.grid : DisplayOptions.list;
-    return setDisplay(newDisplay);
-  };
-
-  const showDetails = (note: INote): void => {
-    updateFormState(NoteFormStates.edit);
-    setNoteToDisplay(note);
-    navigation.navigate("Details");
-  };
-
-  const openNoteForm = (): void => {
-    updateFormState(NoteFormStates.create);
-    navigation.navigate("New note");
-  };
-
-  const getNotesInfo = (): string => {
-    if (!notes || !notes.length) {
-      return "No Records";
+export class NoteList extends React.Component<INoteListProps, INoteListState> {
+    constructor(props: INoteListProps) {
+        super(props);
+        this.state = {
+            display: DisplayOptions.list,
+        }
     }
 
-    return notes.length === 1 ? "One Note" : `${notes.length} Notes`; 
-  };
+    async componentDidMount() {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@notes');
+            const result = jsonValue != null ? JSON.parse(jsonValue) : null;
+            // addNotes([result]);
+            console.log(result);
+        } catch (e) {
+            console.log('Failed to load notes...');
+        }
+    }
 
-  const renderListItems = (notes: INote[]): React.ReactNode => {
-    return notes && notes.map((note, index) => {
-      return (
-        <ListItem
-          key={index}
-          title={note.title}
-          onPress={() => showDetails(note)}
-          bottomDivider
-        />
-      );
-    });
-  };
-
-  return (
-    <View style={styles.container}>
-      {display === DisplayOptions.list && (
-        <ScrollView>
-          {renderListItems(notes)}
-        </ScrollView>
-      ) || (
-        <FlatList
-          data={notes}
-          renderItem={({ item, index }) => {
-            return (
-              <View
-                key={index}
-                style={styles.listItem}
-              >
-                <TouchableOpacity
-                  style={styles.itemContent}
-                  onPress={() => showDetails(item)}
-                  activeOpacity={0.5}
-                >
-                  <Text style={styles.itemTitle}>
-                    {item.title}
-                  </Text>
-
-                  <Text numberOfLines={8}>
-                    {item.description}
-                  </Text>
-
-                  <Text style={styles.itemDate}>
-                    {item.creationDate.format('MMM DD, YYYY')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            );
-          }}
-          keyExtractor={item => item.title}
-          numColumns={2}
-          contentContainerStyle={styles.grid}
-        />
-      )}
-
-      <View style={styles.footer}>
-        <Icon
-          raised
-          name={display === DisplayOptions.list ? "table" : "list"}
-          type="font-awesome"
-          color="#f50"
-          onPress={updateDisplay}
-        />
+    private updateDisplay = () => {
+        const newDisplay = this.state.display === DisplayOptions.list ? DisplayOptions.grid : DisplayOptions.list;
         
-        <Text>
-          {getNotesInfo()}
-        </Text>
+        this.setState({
+            display: newDisplay,
+        });
+    };
 
-        <Icon
-          raised
-          name="plus"
-          type="font-awesome"
-          color="#f50"
-          onPress={openNoteForm}
-        />
-      </View>
-    </View>
-  );
+    private showDetails = (note: INote): void => {
+        this.props.updateFormState(NoteFormStates.edit);
+        this.props.setNoteToDisplay(note);
+        this.props.navigation.navigate("Details");
+    };
+
+    private openNoteForm = (): void => {
+        this.props.updateFormState(NoteFormStates.create);
+        this.props.navigation.navigate("New note");
+    };
+
+    private getNotesInfo = (): string => {
+        if (!this.props.notes || !this.props.notes.length) {
+            return "No Records";
+        }
+
+        return this.props.notes.length === 1 ? "One Note" : `${this.props.notes.length} Notes`;
+    };
+
+    // const alo = async () => {
+    //     try {
+    //         const jsonValue = await AsyncStorage.getItem('@notes');
+    //         const result = jsonValue != null ? JSON.parse(jsonValue) : null;
+    //         console.log(result);
+    //     } catch (e) {
+    //         console.log('Failed to load notes...');
+    //     }
+    // };
+
+    render() {
+        return (
+            <View style={styles.container}>
+                {this.state.display === DisplayOptions.list && (
+                    <SimpleList 
+                        notes={this.props.notes}
+                        showDetails={this.showDetails}
+                    />
+                ) || (
+                    <PreviewList 
+                        notes={this.props.notes}
+                        showDetails={this.showDetails}
+                    />
+                )}
+
+                <View style={styles.footer}>
+                    <Icon
+                        raised
+                        name={this.state.display === DisplayOptions.list ? "table" : "list"}
+                        type="font-awesome"
+                        color="#f50"
+                        onPress={this.updateDisplay}
+                    />
+
+                    <Text>
+                        {this.getNotesInfo()}
+                    </Text>
+
+                    <Icon
+                        raised
+                        name="plus"
+                        type="font-awesome"
+                        color="#f50"
+                        onPress={this.openNoteForm}
+                    />
+                </View>
+            </View>
+        );
+    }
 };
 
 const styles = StyleSheet.create({
-  container: {
-    height: "100%",
-  },
-  grid: {
-    paddingTop: 15,
-    paddingBottom: 15,
-    paddingLeft: 5,
-    paddingRight: 5,
-    backgroundColor: "white",
-  },
-  listItem: {
-    flex: 1,
-    height: 250,
-    padding: 8,
-  },
-  itemContent: {
-    flex: 1,
-    alignItems: "center",
-    padding: 12,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "#ccc",
-    borderRadius: 20,
-  },
-  itemTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    marginBottom: 6,
-  },
-  itemDate: {
-    position: "absolute",
-    bottom: 12,
-    left: 12,
-    fontSize: 12,
-    color: "gray",
-  },
-  footer: {
-    height: "14%",
-    paddingLeft: 10,
-    paddingRight: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
+    container: {
+        height: "100%",
+    },
+    footer: {
+        height: "14%",
+        paddingLeft: 10,
+        paddingRight: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
 });

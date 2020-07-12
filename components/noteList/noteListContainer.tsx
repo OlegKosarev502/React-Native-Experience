@@ -1,21 +1,22 @@
 import { connect } from 'react-redux';
 
-import { NoteList } from './noteList';
-import { setNoteToDisplay, updateFormState } from '../../store/actions';
 import { IAppState } from '../../interfaces/intrefaces';
+import { addNotes, setNoteToDisplay, updateFormState } from '../../store/actions';
+import { NoteList } from './noteList';
 
 const mapStateToProps = (state: IAppState) => {
-  return {
-    notes: state.notes,
-    formState: state.noteFormState,
-  };
+    return {
+        notes: state.notes,
+        formState: state.noteFormState,
+    };
 };
 
 const mapDispatchToProps = {
-  setNoteToDisplay,
-  updateFormState,
+    addNotes,
+    setNoteToDisplay,
+    updateFormState,
 };
 
 export const NoteListContainer = connect(
-  mapStateToProps, mapDispatchToProps
-)(NoteList); 
+    mapStateToProps, mapDispatchToProps
+)(NoteList);

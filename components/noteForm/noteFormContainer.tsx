@@ -5,18 +5,18 @@ import { NoteForm } from './noteForm';
 import { addNote, removeNote, updateNote } from '../../store/actions';
 
 const mapStateToProps = (state: IAppState) => {
-  return {
-    formState: state.noteFormState,
-    note: state.noteToDipslay,
-  };
+    return {
+        formState: state.noteFormState,
+        note: state.noteToDipslay,
+    };
 };
 
 const mapDispatchToProps = {
-  addNote,
-  removeNote,
-  updateNote,
+    addNote,
+    removeNote,
+    updateNote,
 };
 
 export const NoteFormContainer = connect(
-  mapStateToProps, mapDispatchToProps
-)(NoteForm); 
+    mapStateToProps, mapDispatchToProps
+)(NoteForm);
