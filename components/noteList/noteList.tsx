@@ -24,7 +24,7 @@ interface INoteListState {
     display: DisplayOptions;
 }
 
-export class NoteList extends React.Component<INoteListProps, INoteListState> {
+class NoteList extends React.Component<INoteListProps, INoteListState> {
     constructor(props: INoteListProps) {
         super(props);
         this.state = {
@@ -170,3 +170,5 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
 });
+
+export default NoteList;

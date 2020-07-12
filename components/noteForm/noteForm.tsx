@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React from 'react';
 import { Keyboard, StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
@@ -16,125 +16,129 @@ interface INoteFormProps {
     navigation: any;
 }
 
-export const NoteForm: FunctionComponent<INoteFormProps> = ({
-    formState,
-    note,
-    notes,
-    setNotes,
-    removeNote,
-    updateNote,
-    navigation,
-}) => {
-    const [title, setTitle] = useState(
-        formState === NoteFormStates.edit ? note.title : ''
-    );
-    const [description, setDescription] = useState(
-        formState === NoteFormStates.edit ? note.description : ''
-    );
-    const [isFooterVisible, setFooterVisibility] = useState(true);
+interface INoteFormState {
+    title: string;
+    description: string | undefined;
+    isFooterVisible: boolean;
+}
 
-    useEffect(() => {
-        Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
-        Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
-
-        // cleanup function
-        return () => {
-            Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
-            Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+class NoteForm extends React.Component<INoteFormProps, INoteFormState> {
+    constructor(props: INoteFormProps) {
+        super(props);
+        this.state = {
+            title: this.props.formState === NoteFormStates.edit ? this.props.note.title : '',
+            description: this.props.formState === NoteFormStates.edit ? this.props.note.description : '',
+            isFooterVisible: true,
         };
-    }, []);
+    }
 
-    const _keyboardDidShow = () => {
-        setFooterVisibility(false);
+    componentDidMount() {
+        Keyboard.addListener("keyboardDidShow", this.keyboardDidShow);
+        Keyboard.addListener("keyboardDidHide", this.keyboardDidHide);
+    }
+
+    componentWillUnmount() {
+        Keyboard.removeListener("keyboardDidShow", this.keyboardDidShow);
+        Keyboard.removeListener("keyboardDidHide", this.keyboardDidHide);
+    }
+
+    private keyboardDidShow = () => {
+        this.setState({
+            isFooterVisible: false,
+        });
     };
 
-    const _keyboardDidHide = () => {
-        setFooterVisibility(true);
+    private keyboardDidHide = () => {
+        this.setState({
+            isFooterVisible: true,
+        });
     };
 
-    const saveNotesInStorage = async (newNotes: INote[] | []) => {
+    private saveNotesInStorage = async (notes: INote[] | []) => {
         try {
-            const jsonValue = JSON.stringify(newNotes);
+            const jsonValue = JSON.stringify(notes);
             await AsyncStorage.setItem('@notes', jsonValue);
-        } catch (e) {
+        } catch(error) {
             console.log('Failed to save notes...');
         }
     };
 
-    const addRecord = async () => {
-        const data = {
+    private addNote = async () => {
+        const note = {
             id: uuidv4(),
-            title: title || "No title",
-            description: description || "No description",
+            title: this.state.title || "No title",
+            description: this.state.description || "No description",
             creationDate: new Date().toISOString(),
         };
 
-        const newNotes = [...notes, data];
+        const notes = [...this.props.notes, note];
 
-        setNotes(newNotes);
-        await saveNotesInStorage(newNotes);
+        this.props.setNotes(notes);
+        await this.saveNotesInStorage(notes);
 
-        navigation.navigate("Notes");
+        this.props.navigation.navigate("Notes");
     };
 
-    const removeRecord = (): void => {
-        removeNote(note.id);
-        navigation.navigate("Notes");
+    private removeNote = (): void => {
+        this.props.removeNote(this.props.note.id);
+        this.props.navigation.navigate("Notes");
     };
 
-    const updateRecord = (): void => {
-        const data = Object.assign({}, note);
-        data.title = title;
-        data.description = description;
+    private updateNote = (): void => {
+        const data = Object.assign({}, this.props.note);
+        data.title = this.state.title;
+        data.description = this.state.description;
 
-        updateNote(data);
-        navigation.navigate("Notes");
+        this.props.updateNote(data);
+        this.props.navigation.navigate("Notes");
     };
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.form}>
-                <TextInput
-                    value={title}
-                    placeholder="Title"
-                    onChangeText={value => setTitle(value)}
-                    onSubmitEditing={Keyboard.dismiss}
-                    style={styles.title}
-                />
-
-                <TextInput
-                    value={description}
-                    multiline={true}
-                    placeholder="Description"
-                    onChangeText={value => setDescription(value)}
-                    onSubmitEditing={Keyboard.dismiss}
-                    style={styles.description}
-                />
-            </View>
-
-            {isFooterVisible && (
-                <View style={styles.footer}>
-                    {formState === NoteFormStates.edit && (
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.form}>
+                    <TextInput
+                        value={this.state.title}
+                        placeholder="Title"
+                        onChangeText={value => this.setState({ title: value })}
+                        onSubmitEditing={Keyboard.dismiss}
+                        style={styles.title}
+                    />
+    
+                    <TextInput
+                        value={this.state.description}
+                        multiline={true}
+                        placeholder="Description"
+                        onChangeText={value => this.setState({ description: value })}
+                        onSubmitEditing={Keyboard.dismiss}
+                        style={styles.description}
+                    />
+                </View>
+    
+                {this.state.isFooterVisible && (
+                    <View style={styles.footer}>
+                        {this.props.formState === NoteFormStates.edit && (
+                            <Icon
+                                raised
+                                type="font-awesome"
+                                name="close"
+                                color="#f50"
+                                onPress={this.removeNote}
+                            />
+                        )}
+    
                         <Icon
                             raised
                             type="font-awesome"
-                            name="close"
+                            name={this.props.formState === NoteFormStates.create ? "check" : "save"}
                             color="#f50"
-                            onPress={removeRecord}
+                            onPress={this.props.formState === NoteFormStates.create ? this.addNote : this.updateNote}
                         />
-                    )}
-
-                    <Icon
-                        raised
-                        type="font-awesome"
-                        name={formState === NoteFormStates.create ? "check" : "save"}
-                        color="#f50"
-                        onPress={formState === NoteFormStates.create ? addRecord : updateRecord}
-                    />
-                </View>
-            )}
-        </View>
-    );
+                    </View>
+                )}
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -161,3 +165,5 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
     },
 });
+
+export default NoteForm;

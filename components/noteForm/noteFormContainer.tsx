@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { IAppState } from '../../interfaces/intrefaces';
-import { NoteForm } from './noteForm';
+import NoteForm from './noteForm';
 import { setNotes, removeNote, updateNote } from '../../store/actions';
 
 const mapStateToProps = (state: IAppState) => {
@@ -18,6 +18,8 @@ const mapDispatchToProps = {
     updateNote,
 };
 
-export const NoteFormContainer = connect(
+const NoteFormContainer = connect(
     mapStateToProps, mapDispatchToProps
 )(NoteForm);
+
+export default NoteFormContainer;
