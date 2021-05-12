@@ -1,10 +1,10 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
-import moment from 'moment';
-import { Keyboard, StyleSheet, View, TextInput } from 'react-native';
-import { Icon } from 'react-native-elements';
+import React, { FunctionComponent, useState, useEffect } from "react";
+import moment from "moment";
+import { Keyboard, StyleSheet, View, TextInput } from "react-native";
+import { Icon } from "react-native-elements";
 
-import { INote, NoteFormStates } from '../../interfaces/intrefaces';
-import { uuidv4 } from '../../shared/uuid';
+import { INote, NoteFormStates } from "../../interfaces/intrefaces";
+import { uuidv4 } from "../../shared/uuid";
 
 interface INoteFormProps {
   formState: NoteFormStates;
@@ -24,10 +24,10 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
   navigation,
 }) => {
   const [title, setTitle] = useState(
-    formState === NoteFormStates.edit ? note.title : ''
+    formState === NoteFormStates.edit ? note.title : ""
   );
   const [description, setDescription] = useState(
-    formState === NoteFormStates.edit ? note.description : ''
+    formState === NoteFormStates.edit ? note.description : ""
   );
   const [isFooterVisible, setFooterVisibility] = useState(true);
 
@@ -57,12 +57,12 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
       description: description || "No description",
       creationDate: moment(),
     };
-    
+
     addNote(data);
     navigation.navigate("Notes");
   };
 
-  const removeRecord = (): void => {    
+  const removeRecord = (): void => {
     removeNote(note.id);
     navigation.navigate("Notes");
   };
@@ -82,7 +82,7 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
         <TextInput
           value={title}
           placeholder="Title"
-          onChangeText={value => setTitle(value)}
+          onChangeText={(value) => setTitle(value)}
           onSubmitEditing={Keyboard.dismiss}
           style={styles.title}
         />
@@ -91,7 +91,7 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
           value={description}
           multiline={true}
           placeholder="Description"
-          onChangeText={value => setDescription(value)}
+          onChangeText={(value) => setDescription(value)}
           onSubmitEditing={Keyboard.dismiss}
           style={styles.description}
         />
@@ -114,13 +114,15 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
             type="font-awesome"
             name={formState === NoteFormStates.create ? "check" : "save"}
             color="#f50"
-            onPress={formState === NoteFormStates.create ? addRecord : updateRecord}
+            onPress={
+              formState === NoteFormStates.create ? addRecord : updateRecord
+            }
           />
         </View>
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,8 +1,15 @@
-import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity, FlatList } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements'
+import React, { FunctionComponent, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
+import { ListItem, Icon } from "react-native-elements";
 
-import { INote, NoteFormStates } from '../../interfaces/intrefaces';
+import { INote, NoteFormStates } from "../../interfaces/intrefaces";
 
 enum DisplayOptions {
   list = "list",
@@ -25,7 +32,10 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
   const [display, setDisplay] = useState(DisplayOptions.list);
 
   const updateDisplay = () => {
-    const newDisplay = display === DisplayOptions.list ? DisplayOptions.grid : DisplayOptions.list;
+    const newDisplay =
+      display === DisplayOptions.list
+        ? DisplayOptions.grid
+        : DisplayOptions.list;
     return setDisplay(newDisplay);
   };
 
@@ -45,58 +55,49 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
       return "No Records";
     }
 
-    return notes.length === 1 ? "One Note" : `${notes.length} Notes`; 
+    return notes.length === 1 ? "One Note" : `${notes.length} Notes`;
   };
 
   const renderListItems = (notes: INote[]): React.ReactNode => {
-    return notes && notes.map((note, index) => {
-      return (
-        <ListItem
-          key={index}
-          title={note.title}
-          onPress={() => showDetails(note)}
-          bottomDivider
-        />
-      );
-    });
+    return (
+      notes &&
+      notes.map((note, index) => {
+        return (
+          <ListItem key={index} onPress={() => showDetails(note)} bottomDivider>
+            <Text>{note.title}</Text>
+          </ListItem>
+        );
+      })
+    );
   };
 
   return (
     <View style={styles.container}>
-      {display === DisplayOptions.list && (
-        <ScrollView>
-          {renderListItems(notes)}
-        </ScrollView>
-      ) || (
+      {(display === DisplayOptions.list && (
+        <ScrollView>{renderListItems(notes)}</ScrollView>
+      )) || (
         <FlatList
           data={notes}
           renderItem={({ item, index }) => {
             return (
-              <View
-                key={index}
-                style={styles.listItem}
-              >
+              <View key={index} style={styles.listItem}>
                 <TouchableOpacity
                   style={styles.itemContent}
                   onPress={() => showDetails(item)}
                   activeOpacity={0.5}
                 >
-                  <Text style={styles.itemTitle}>
-                    {item.title}
-                  </Text>
+                  <Text style={styles.itemTitle}>{item.title}</Text>
 
-                  <Text numberOfLines={8}>
-                    {item.description}
-                  </Text>
+                  <Text numberOfLines={8}>{item.description}</Text>
 
                   <Text style={styles.itemDate}>
-                    {item.creationDate.format('MMM DD, YYYY')}
+                    {item.creationDate.format("MMM DD, YYYY")}
                   </Text>
                 </TouchableOpacity>
               </View>
             );
           }}
-          keyExtractor={item => item.title}
+          keyExtractor={(item) => item.title}
           numColumns={2}
           contentContainerStyle={styles.grid}
         />
@@ -110,10 +111,8 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
           color="#f50"
           onPress={updateDisplay}
         />
-        
-        <Text>
-          {getNotesInfo()}
-        </Text>
+
+        <Text>{getNotesInfo()}</Text>
 
         <Icon
           raised

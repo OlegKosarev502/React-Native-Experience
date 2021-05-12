@@ -1,4 +1,4 @@
-import { INote, NoteFormStates } from '../interfaces/intrefaces';
+import { INote, NoteFormStates } from "../interfaces/intrefaces";
 
 export const actionTypes = {
   ADD_NOTE: "ADD_NOTE",
