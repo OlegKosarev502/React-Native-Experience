@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
 import { IAppState } from "../../interfaces/intrefaces";
-import { NoteForm } from "./noteForm";
+import { NoteForm } from "./NoteForm";
 import { addNote, removeNote, updateNote } from "../../store/actions";
 
 const mapStateToProps = (state: IAppState) => {

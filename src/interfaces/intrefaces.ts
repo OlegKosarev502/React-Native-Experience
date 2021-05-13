@@ -1,5 +1,11 @@
 import { Moment } from "moment";
 
+export enum Screens {
+  Notes = "Notes",
+  Details = "Details",
+  NewNote = "NewNote",
+}
+
 export enum NoteFormStates {
   create = "create",
   edit = "edit",

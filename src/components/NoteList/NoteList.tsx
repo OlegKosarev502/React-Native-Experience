@@ -8,8 +8,10 @@ import {
   FlatList,
 } from "react-native";
 import { ListItem, Icon } from "react-native-elements";
+import { colorPrimary } from "../../constants/styles";
 
 import { INote, NoteFormStates } from "../../interfaces/intrefaces";
+import { Screens } from "../../interfaces/intrefaces";
 
 enum DisplayOptions {
   list = "list",
@@ -42,12 +44,12 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
   const showDetails = (note: INote): void => {
     updateFormState(NoteFormStates.edit);
     setNoteToDisplay(note);
-    navigation.navigate("Details");
+    navigation.navigate(Screens.Details);
   };
 
   const openNoteForm = (): void => {
     updateFormState(NoteFormStates.create);
-    navigation.navigate("New note");
+    navigation.navigate(Screens.NewNote);
   };
 
   const getNotesInfo = (): string => {
@@ -64,7 +66,9 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
       notes.map((note, index) => {
         return (
           <ListItem key={index} onPress={() => showDetails(note)} bottomDivider>
-            <Text>{note.title}</Text>
+            <ListItem.Content>
+              <ListItem.Title>{note.title}</ListItem.Title>
+            </ListItem.Content>
           </ListItem>
         );
       })
@@ -108,7 +112,7 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
           raised
           name={display === DisplayOptions.list ? "table" : "list"}
           type="font-awesome"
-          color="#f50"
+          color={colorPrimary}
           onPress={updateDisplay}
         />
 
@@ -118,7 +122,7 @@ export const NoteList: FunctionComponent<INoteListProps> = ({
           raised
           name="plus"
           type="font-awesome"
-          color="#f50"
+          color={colorPrimary}
           onPress={openNoteForm}
         />
       </View>

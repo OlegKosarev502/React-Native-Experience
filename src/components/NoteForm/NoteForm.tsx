@@ -5,6 +5,8 @@ import { Icon } from "react-native-elements";
 
 import { INote, NoteFormStates } from "../../interfaces/intrefaces";
 import { uuidv4 } from "../../shared/uuid";
+import { colorPrimary } from "../../constants/styles";
+import { Screens } from "../../interfaces/intrefaces";
 
 interface INoteFormProps {
   formState: NoteFormStates;
@@ -59,12 +61,12 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
     };
 
     addNote(data);
-    navigation.navigate("Notes");
+    navigation.navigate(Screens.Notes);
   };
 
   const removeRecord = (): void => {
     removeNote(note.id);
-    navigation.navigate("Notes");
+    navigation.navigate(Screens.Notes);
   };
 
   const updateRecord = (): void => {
@@ -73,7 +75,7 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
     data.description = description;
 
     updateNote(data);
-    navigation.navigate("Notes");
+    navigation.navigate(Screens.Notes);
   };
 
   return (
@@ -104,7 +106,7 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
               raised
               type="font-awesome"
               name="close"
-              color="#f50"
+              color={colorPrimary}
               onPress={removeRecord}
             />
           )}
@@ -113,7 +115,7 @@ export const NoteForm: FunctionComponent<INoteFormProps> = ({
             raised
             type="font-awesome"
             name={formState === NoteFormStates.create ? "check" : "save"}
-            color="#f50"
+            color={colorPrimary}
             onPress={
               formState === NoteFormStates.create ? addRecord : updateRecord
             }

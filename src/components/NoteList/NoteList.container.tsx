@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 
-import { NoteList } from "./noteList";
+import { NoteList } from "./NoteList";
 import { setNoteToDisplay, updateFormState } from "../../store/actions";
 import { IAppState } from "../../interfaces/intrefaces";
 
